@@ -1,3 +1,4 @@
+
 # keras-yolo3
 
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
@@ -30,6 +31,10 @@ python yolo.py   OR   python yolo_video.py
     Box format: x_min,y_min,x_max,y_max,class_id (no space).  
     For VOC dataset, try `python voc_annotation.py`
 
-2. Modify train.py and start training.  
+2.download backend from below and place yolo_weights.h5 in model_data folder
+
+    https://drive.google.com/drive/u/2/folders/1Qj46bDCBWMbIXm7rPZCIjCVIczxaj2l_
+
+3. Modify train.py and start training.  
     `python train.py`  
     You will get the trained model model_data/my_yolo.h5.
