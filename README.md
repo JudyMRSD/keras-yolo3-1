@@ -21,6 +21,21 @@ python convert.py yolov3.cfg yolov3.weights model_data/yolo.h5
 python yolo.py   OR   python yolo_video.py
 ```
 
+aerial dataset
+
+```
+python convert.py yolov3-aerial.cfg yolov3-aerial.weights model_data/yolo-aerial.h5
+```
+
+### hard coded part:
+yolo.py:
+```
+self.model_path = 'model_data/yolo-aerial.h5'
+self.anchors_path = 'model_data/yolo_anchors.txt'
+self.classes_path = 'model_data/aerial_classes.txt'
+```
+
+aerial_classes match number of classes in yolo3-aerial.cfg  (20)
 ---
 
 ## Training
