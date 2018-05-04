@@ -17,6 +17,10 @@ def convert_annotation(in_file, out_file):
         b = (int(xmlbox.find('xmin').text), int(xmlbox.find('ymin').text), int(xmlbox.find('xmax').text), int(xmlbox.find('ymax').text))
         out_file.write(" " + ",".join([str(a) for a in b]) + ',' + str(cls_id))
 
+def sortKeyFunc(s):
+    return(int(os.path.basename(s)[:-4]))
+
+
 img_dir = "./train_data/fifth_dataset/images_may4/"
 ann_dir = "./train_data/fifth_dataset/annotations_may4/"
 out_file = open('./train_data/fifth_dataset.txt', 'w')
@@ -24,8 +28,11 @@ out_file = open('./train_data/fifth_dataset.txt', 'w')
 print("img_dir", img_dir)
 print("ann_dir", ann_dir)
 print("out_file", out_file)
-image_names = sorted(glob.glob(img_dir + "*.jpg"))
+image_names = sorted(glob.glob(img_dir + "*.jpg"), key = sortKeyFunc)
 print("image_names",image_names)
+
+
+
 for img_path in image_names:
     print("img_path", img_path)
     out_file.write(img_path)
