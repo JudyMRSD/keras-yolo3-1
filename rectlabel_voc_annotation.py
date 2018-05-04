@@ -20,10 +20,11 @@ def convert_annotation(in_file, out_file):
 def sortKeyFunc(s):
     return(int(os.path.basename(s)[:-4]))
 
-
-img_dir = "./train_data/fifth_dataset/images_may4/"
-ann_dir = "./train_data/fifth_dataset/annotations_may4/"
-out_file = open('./train_data/fifth_dataset.txt', 'w')
+wd = os.getcwd()
+print("wd", wd)
+img_dir = wd+"/train_data/fifth_dataset/images_may4/"
+ann_dir = wd+"/train_data/fifth_dataset/annotations_may4/"
+out_file = open(wd+"/train_data/train.txt", 'w')
 
 print("img_dir", img_dir)
 print("ann_dir", ann_dir)
