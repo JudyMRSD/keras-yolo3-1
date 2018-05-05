@@ -53,7 +53,7 @@ The file is used to load pretrained weights
 ```
 python convert.py yolov3-aerial.cfg yolov3-aerial.weights model_data/yolo-aerial.h5
 ```
-    
+
 3. Modify train.py and start training.  
     `python train.py`  
     You will get the trained model model_data/my_yolo.h5.
