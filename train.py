@@ -2,7 +2,9 @@
 Retrain the YOLO model for your own dataset.
 """
 import os
+#import cv2
 
+os.environ['KERAS_BACKEND'] = 'tensorflow'
 import numpy as np
 from PIL import Image
 from keras.layers import Input, Lambda
@@ -21,14 +23,18 @@ def _main():
     data_path = 'train.npz'
     output_path = 'model_data/my_yolo.h5'
     log_dir = 'logs/000/'
-    classes_path = 'model_data/voc_classes.txt'
+    # classes_path = 'model_data/voc_classes.txt'
+    # anchors_path = 'model_data/yolo_anchors.txt'
     anchors_path = 'model_data/yolo_anchors.txt'
+    classes_path = 'model_data/aerial_classes.txt'
     class_names = get_classes(classes_path)
     anchors = get_anchors(anchors_path)
 
     input_shape = (416,416) # multiple of 32
     image_data, box_data = get_training_data(annotation_path, data_path,
         input_shape, max_boxes=100, load_previous=True)
+    #cv2.imshow("img data[0]", image_data[0])
+    #cv2.waitKey(0)
     y_true = preprocess_true_boxes(box_data, input_shape, anchors, len(class_names))
 
     infer_model, model = create_model(input_shape, anchors, len(class_names),
@@ -108,7 +114,8 @@ def create_model(input_shape, anchors, num_classes, load_pretrained=True, freeze
     model_body = yolo_body(image_input, num_anchors, num_classes)
 
     if load_pretrained:
-        weights_path = os.path.join('model_data', 'yolo_weights.h5')
+        weights_path = os.path.join('model_data', 'yolo_aerial.h5')
+        print("weights_path", weights_path)
         if not os.path.exists(weights_path):
             print("CREATING WEIGHTS FILE" + weights_path)
             yolo_path = os.path.join('model_data', 'yolo.h5')
