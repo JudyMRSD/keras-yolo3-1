@@ -46,6 +46,7 @@ aerial_classes match number of classes in yolo3-aerial.cfg  (20)
     Box format: x_min,y_min,x_max,y_max,class_id (no space).  
     For VOC dataset, try `python voc_annotation.py`
 
+
 2. Make sure you have run python convert.py yolov3.cfg yolov3.weights model_data/yolo.h5
 A file model_data/yolo_weights.h5 will be generated when you run train.py for the first time.
 The file is used to load pretrained weights
@@ -53,6 +54,7 @@ The file is used to load pretrained weights
 ```
 python convert.py yolov3-aerial.cfg yolov3-aerial.weights model_data/yolo-aerial.h5
 ```
+
 
 3. Modify train.py and start training.  
     `python train.py`  
