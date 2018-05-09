@@ -2,7 +2,7 @@ import xml.etree.ElementTree as ET
 import glob
 import os
 
-classes = ["bus", "car"]
+classes = ["car"]
 Train_One_Class = True
 
 def convert_annotation(in_file, out_file):
@@ -18,6 +18,8 @@ def convert_annotation(in_file, out_file):
             cls_id = classes.index(cls)
         xmlbox = obj.find('bndbox')
         b = (int(xmlbox.find('xmin').text), int(xmlbox.find('ymin').text), int(xmlbox.find('xmax').text), int(xmlbox.find('ymax').text))
+        #print("b", b)
+        #print("box data: ", " " + ",".join([str(a) for a in b]) + ',' + str(cls_id))
         out_file.write(" " + ",".join([str(a) for a in b]) + ',' + str(cls_id))
 
 def sortKeyFunc(s):

@@ -18,12 +18,15 @@ from yolo3.utils import letterbox_image
 # Default anchor boxes
 YOLO_ANCHORS = np.array(((10,13), (16,30), (33,23), (30,61),
     (62,45), (59,119), (116,90), (156,198), (373,326)))
-Plot_Training_Instances = True
+Plot_Training_Instances = False
 Train_Log_Dir = './train_log_dir/'
+Batch_Size = 1
+Load_Previous = True
+
 
 def _main():
     annotation_path = './train_data/train.txt'
-    data_path = './train_data//fifth_dataset/train.npz'
+    data_path = './train_data/fifth_dataset/train.npz'
     output_path = './model_data/my_yolo.h5'
     log_dir = 'logs/000/'
     # classes_path = 'model_data/voc_classes.txt'
@@ -34,7 +37,8 @@ def _main():
     anchors = get_anchors(anchors_path)
 
     input_shape = (4160,4160) # multiple of 32
-    image_data, box_data = get_training_data(annotation_path, data_path,input_shape, max_boxes=100, load_previous=True)
+    # input_shape = (640,640) # multiple of 32
+    image_data, box_data = get_training_data(annotation_path, data_path,input_shape, max_boxes=100, load_previous=Load_Previous)
     #cv2.imshow("img data[0]", image_data[0])
     #cv2.waitKey(0)
     y_true = preprocess_true_boxes(box_data, input_shape, anchors, len(class_names))
@@ -179,7 +183,7 @@ def train(model, image_data, y_true, log_dir='logs/'):
     history = model.fit([image_data, *y_true],
           np.zeros(len(image_data)),
           validation_split=.1,
-          batch_size=32,
+          batch_size=Batch_Size,
           epochs=30000,
           callbacks=[early_stopping])
 
