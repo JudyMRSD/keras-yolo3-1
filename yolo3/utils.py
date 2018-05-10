@@ -25,4 +25,5 @@ def letterbox_image(image, size):
 
     boxed_image = Image.new('RGB', size, (128,128,128))
     boxed_image.paste(resized_image, ((w-new_w)//2,(h-new_h)//2))
+
     return boxed_image

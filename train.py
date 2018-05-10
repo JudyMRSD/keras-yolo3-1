@@ -22,7 +22,7 @@ Plot_Training_Instances = False
 Train_Log_Dir = './train_log_dir/'
 Batch_Size = 1
 Load_Previous = True
-
+Input_Shape = (4160,4160) # multiple of 32
 
 def _main():
     annotation_path = './train_data/train.txt'
@@ -36,7 +36,7 @@ def _main():
     class_names = get_classes(classes_path)
     anchors = get_anchors(anchors_path)
 
-    input_shape = (4160,4160) # multiple of 32
+    input_shape = Input_Shape # multiple of 32
     # input_shape = (640,640) # multiple of 32
     image_data, box_data = get_training_data(annotation_path, data_path,input_shape, max_boxes=100, load_previous=Load_Previous)
     #cv2.imshow("img data[0]", image_data[0])
@@ -167,11 +167,15 @@ def train(model, image_data, y_true, log_dir='logs/'):
     model.compile(optimizer='adam', loss={
         # use custom yolo_loss Lambda layer.
         'yolo_loss': lambda y_true, y_pred: y_pred})
+        #           metrics=['accuracy'])
 
     # logging = TensorBoard(log_dir=log_dir)
     #checkpoint = ModelCheckpoint(log_dir + "ep{epoch:03d}-loss{loss:.3f}-val_loss{val_loss:.3f}.h5",
+    # the latest best model according to the quantity monitored will not be overwritten
+    checkpoint = ModelCheckpoint(log_dir + "checkpoint.h5", monitor='val_loss', save_best_only=True)#, period = 50)
+
     #    monitor='val_loss', save_weights_only=True, save_best_only=True)
-    early_stopping = EarlyStopping(monitor='val_loss', min_delta=0, patience=5, verbose=1, mode='auto')
+    # early_stopping = EarlyStopping(monitor='val_loss', min_delta=0, patience=5, verbose=1, mode='auto')
 
     # model.fit([image_data, *y_true],
     #           np.zeros(len(image_data)),
@@ -184,10 +188,11 @@ def train(model, image_data, y_true, log_dir='logs/'):
           np.zeros(len(image_data)),
           validation_split=.1,
           batch_size=Batch_Size,
-          epochs=30000,
-          callbacks=[early_stopping])
+          epochs=10000,
+          callbacks=[checkpoint])
 
     model.save_weights(log_dir + 'trained_weights.h5')
+    model.save_path(log_dir + 'trained_model.h5')
 
     trainMonitTool = TrainMonitorTools()
     trainMonitTool.visualizeTrain(history)

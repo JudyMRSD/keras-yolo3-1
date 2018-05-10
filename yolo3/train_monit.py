@@ -9,13 +9,13 @@ class TrainMonitorTools():
         print(history.history.keys())  # dict_keys(['val_acc', 'acc', 'loss', 'val_loss'])
         plt.close('all')
         # summarize history for accuracy
-        plt.plot(history.history['acc'])
-        plt.plot(history.history['val_acc'])
-        plt.title('model accuracy')
-        plt.ylabel('accuracy')
-        plt.xlabel('epoch')
-        plt.legend(['train', 'test'], loc='upper left')
-        plt.savefig('../visualize/acc.jpg')
+        # plt.plot(history.history['acc'])
+        # plt.plot(history.history['val_acc'])
+        # plt.title('model accuracy')
+        # plt.ylabel('accuracy')
+        # plt.xlabel('epoch')
+        # plt.legend(['train', 'test'], loc='upper left')
+        # plt.savefig('./logs/acc.jpg')
         # plt.show()
         # summarize history for loss
         plt.close('all')
@@ -26,7 +26,7 @@ class TrainMonitorTools():
         plt.xlabel('epoch')
         plt.legend(['train', 'test'], loc='upper left')
         # plt.show()
-        plt.savefig('../visualize/loss.jpg')
+        plt.savefig('./logs/loss.jpg')
 
         # loss = history.history['loss']
         # print("loss", loss)

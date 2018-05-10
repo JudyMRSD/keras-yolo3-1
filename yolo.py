@@ -19,22 +19,40 @@ from PIL import Image, ImageFont, ImageDraw
 from yolo3.model import yolo_eval
 from yolo3.utils import letterbox_image
 
+
+# Input_Shape = (4160,4160) # multiple of 32
+
+# Input_Img_Path = "dog.jpg"
+
+#Mode = "coco"
+Mode = "aerial"
+if Mode == "coco":
+    Input_Img_Path = "dog.jpg"
+    Input_Shape = (416, 416)
+if Mode == "aerial":
+    Input_Shape = (4160, 4160)
+    Input_Img_Path = "./train_data/fifth_dataset/images_may4/200.jpg"
+
+
 class YOLO(object):
     def __init__(self):
-        #self.model_path = 'model_data/yolo.h5'
-        #self.anchors_path = 'model_data/yolo_anchors.txt'
-        #self.classes_path = 'model_data/coco_classes.txt'
-        # self.model_path = 'model_data/yolo-aerial.h5'
-        self.model_path = 'model_data/my_yolo.h5'
         self.anchors_path = 'model_data/yolo_anchors.txt'
-        self.classes_path = 'model_data/aerial_classes.txt'
+
+        if Mode == "coco":
+            self.model_path = 'model_data/yolo.h5'
+            self.classes_path = 'model_data/coco_classes.txt'
+        elif Mode == "aerial":
+
+            # self.model_path = 'model_data/yolo-aerial.h5'
+            self.model_path = './logs/000/trained_weights.h5'
+            self.classes_path = 'model_data/aerial_classes.txt'
 
         self.score = 0.3
         self.iou = 0.5
         self.class_names = self._get_class()
         self.anchors = self._get_anchors()
         self.sess = K.get_session()
-        self.model_image_size = (416, 416) # fixed size or (None, None)
+        self.model_image_size = Input_Shape  # fixed size or (None, None)
         self.is_fixed_size = self.model_image_size != (None, None)
         self.boxes, self.scores, self.classes = self.generate()
 
@@ -72,6 +90,8 @@ class YOLO(object):
         random.seed(None)  # Reset seed to default.
 
         # Generate output tensor targets for filtered bounding boxes.
+        print("self.yolo_model.output, self.anchors,len(self.class_names), self.input_image_shape",
+              self.yolo_model.output, self.anchors,len(self.class_names))
         self.input_image_shape = K.placeholder(shape=(2, ))
         boxes, scores, classes = yolo_eval(self.yolo_model.output, self.anchors,
                 len(self.class_names), self.input_image_shape,
@@ -182,18 +202,25 @@ def detect_video(yolo, video_path):
 
 
 def detect_img(yolo):
-    while True:
-        img = input('Input image filename:')
-        try:
-            image = Image.open(img)
-        except:
-            print('Open Error! Try again!')
-            continue
-        else:
-            r_image = yolo.detect_image(image)
-            r_image.show()
-    yolo.close_session()
+    # while True:
+    #     img = input('Input image filename:')
+    #     #img = Input_Img_Path
+    #     try:
+    #         image = Image.open(img)
+    #     except:
+    #         print('Open Error! Try again!')
+    #         continue
+    #     else:
+    #         r_image = yolo.detect_image(image)
+    #         #r_image.show()
+    #         r_image.save("result.jpg")
+    # yolo.close_session()
+    img = Input_Img_Path
+    image = Image.open(img)
 
+    r_image = yolo.detect_image(image)
+    #r_image.show()
+    r_image.save("result.jpg")
 
 
 if __name__ == '__main__':
